@@ -1,0 +1,19 @@
+{
+  "name": "calc.js",
+  "version": "1.0.0",
+  "description": "calc(' 0.1  * 0.2 + 0.4')",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fzred/calc.js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fzred/calc.js/issues"
+  },
+  "homepage": "https://github.com/fzred/calc.js#readme"
+}
