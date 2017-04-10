@@ -147,7 +147,6 @@ function praseExpression(str) {
         v1 = parsePrimaryExpression()
         while (true) {
             let token = nextToken()
-            console.log('parseTerm', token)
             if (token.type != tokenEnum.MUL_OPERATOR_TOKEN
                 && token.type != tokenEnum.DIV_OPERATOR_TOKEN) {
                 aheadToken()
@@ -169,7 +168,6 @@ function praseExpression(str) {
         v1 = parseTerm()
         while (true) {
             let token = nextToken()
-            console.log('parseExpression', token)
             if (token.type != tokenEnum.ADD_OPERATOR_TOKEN
                 && token.type != tokenEnum.SUB_OPERATOR_TOKEN) {
                 aheadToken()
@@ -185,7 +183,8 @@ function praseExpression(str) {
         return v1
     }
 
-    console.log(parseExpression())
+    return parseExpression()
+
 }
 
 module.exports = {
