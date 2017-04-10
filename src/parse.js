@@ -100,9 +100,6 @@ function praseExpression(str) {
     const tokens = getToken(str)
     let curPos = 0
     let curToken = tokens[curPos]
-//    tokens.forEach(item => {
-//        console.log(item)
-//    })
 
     function nextToken() {
         curToken = tokens[curPos++]
