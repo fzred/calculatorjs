@@ -1,3 +1,5 @@
+const precisionCalc = require('./precisionCalc')
+
 const tokenEnum = {
     NUMBER_TOKEN: 1,
     ADD_OPERATOR_TOKEN: 2,
@@ -6,6 +8,7 @@ const tokenEnum = {
     DIV_OPERATOR_TOKEN: 5,
     LEFT_PAREN_TOKEN: 6,
     RIGHT_PAREN_TOKEN: 7,
+    END_TOKEN: 8,
 }
 
 const lexerStatusEnum = {
@@ -87,10 +90,104 @@ function getToken(str) {
         linePos++
     }
 
+    tokens.push({
+        type: tokenEnum.END_TOKEN,
+    })
     return tokens
 }
 
+function praseExpression(str) {
+    const tokens = getToken(str)
+    let curPos = 0
+    let curToken = tokens[curPos]
+//    tokens.forEach(item => {
+//        console.log(item)
+//    })
+
+    function nextToken() {
+        curToken = tokens[curPos++]
+        return curToken
+    }
+
+    function aheadToken() {
+        curToken = tokens[--curPos]
+    }
+
+    function parsePrimaryExpression() {
+        let value = 0
+        let minusFlog = false // 是否负数
+
+        nextToken()
+
+        if (curToken.type == tokenEnum.SUB_OPERATOR_TOKEN) {
+            minusFlog = true
+            nextToken()
+        }
+
+        if (curToken.type == tokenEnum.NUMBER_TOKEN) {
+            value = curToken.value
+        } else if (curToken.type == tokenEnum.LEFT_PAREN_TOKEN) {
+            // 优先计算 ( ) 里的表达式
+            value = parseExpression()
+            nextToken()
+            if (curToken.type != tokenEnum.RIGHT_PAREN_TOKEN) {
+                throw '缺少 ) '
+            }
+        }
+        value = Number(value)
+        if (minusFlog) {
+            value = -value
+        }
+        return value
+    }
+
+    function parseTerm() {
+        let v1
+        let v2
+        v1 = parsePrimaryExpression()
+        while (true) {
+            let token = nextToken()
+            console.log('parseTerm', token)
+            if (token.type != tokenEnum.MUL_OPERATOR_TOKEN
+                && token.type != tokenEnum.DIV_OPERATOR_TOKEN) {
+                aheadToken()
+                break
+            }
+            v2 = parsePrimaryExpression()
+            if (token.type == tokenEnum.MUL_OPERATOR_TOKEN) {
+                v1 = precisionCalc.mul(v1, v2)
+            } else if (token.type == tokenEnum.DIV_OPERATOR_TOKEN) {
+                v1 = precisionCalc.div(v1, v2)
+            }
+        }
+        return v1
+    }
+
+    function parseExpression() {
+        let v1
+        let v2
+        v1 = parseTerm()
+        while (true) {
+            let token = nextToken()
+            console.log('parseExpression', token)
+            if (token.type != tokenEnum.ADD_OPERATOR_TOKEN
+                && token.type != tokenEnum.SUB_OPERATOR_TOKEN) {
+                aheadToken()
+                break
+            }
+            v2 = parseTerm()
+            if (token.type == tokenEnum.ADD_OPERATOR_TOKEN) {
+                v1 = precisionCalc.add(v1, v2)
+            } else if (token.type == tokenEnum.SUB_OPERATOR_TOKEN) {
+                v1 = precisionCalc.sub(v1, v2)
+            }
+        }
+        return v1
+    }
+
+    console.log(parseExpression())
+}
+
 module.exports = {
-    getToken,
-    tokenEnum,
+    praseExpression,
 }

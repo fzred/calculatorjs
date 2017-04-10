@@ -1,12 +1,9 @@
-const { getToken } = require('./parse')
+const { praseExpression } = require('./parse')
 
 function calc(str) {
-    const tokens = getToken(str)
-    tokens.forEach(item => {
-        console.log(item)
-    })
+    praseExpression(str)
 }
 
-calc(`123*22`)
+calc(`0.1*0.2`)
 
 //export default calc
