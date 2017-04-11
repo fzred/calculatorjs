@@ -11,22 +11,22 @@ const _cf = (function () {
 
 function add(l, r) {
     const f = _cf(l, r)
-    return (l * f + r * f) / f
+    return parseInt(l * f + r * f) / f
 }
 
 function sub(l, r) {
-    const f = _cf(l, r);
-    return (l * f - r * f) / f;
+    const f = _cf(l, r)
+    return parseInt(l * f - r * f) / f
 }
 
 function mul(l, r) {
     const f = _cf(l, r)
-    return (l * f) * (r * f) / (f * f)
+    return parseInt(l * f) * parseInt(r * f) / (f * f)
 }
 
 function div(l, r) {
     const f = _cf(l, r)
-    return (l * f) / (r * f)
+    return parseInt(l * f) / parseInt(r * f)
 }
 
 module.exports = {
