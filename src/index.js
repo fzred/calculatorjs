@@ -1,7 +1,7 @@
 const { parseExpression } = require('./parse')
 
-function cdalc(str) {
+function calc(str) {
     return parseExpression(str)
 }
 
-module.exports = cdalc
+module.exports = calc
