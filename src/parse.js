@@ -96,7 +96,7 @@ function getToken(str) {
     return tokens
 }
 
-function praseExpression(str) {
+function parseExpression(str) {
     const tokens = getToken(str)
     let curPos = 0
     let curToken = tokens[curPos]
@@ -185,5 +185,5 @@ function praseExpression(str) {
 }
 
 module.exports = {
-    praseExpression,
+    parseExpression,
 }
