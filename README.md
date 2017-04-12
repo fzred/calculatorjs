@@ -1,7 +1,9 @@
-# calc.js
-calc(' 0.1 * ( 0.2 + 0.4 ) ')
+# calcjs
 
-解决js float运算不精确问题
+```javascript
+2.1+2.2          // 4.300000000000001
+calc('2.1+2.2')  // 4.3
+```
 
 ## License
 

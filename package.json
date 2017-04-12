@@ -1,22 +1,22 @@
 {
-  "name": "calc.js",
-  "version": "1.0.0",
+  "name": "calculatorjs",
+  "version": "0.1.0",
   "description": "calc(' 0.1  * 0.2 + 0.4')",
-  "main": "index.js",
+  "main": "dist/calc.min.js",
   "scripts": {
     "build": "cross-env BABEL_ENV=product webpack",
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fzred/calc.js.git"
+    "url": "git+https://github.com/fzred/calcjs.git"
   },
-  "author": "",
+  "author": "lred <1179750402@qq.com> (http://www.lred.me) ",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/fzred/calc.js/issues"
+    "url": "https://github.com/fzred/calcjs/issues"
   },
-  "homepage": "https://github.com/fzred/calc.js#readme",
+  "homepage": "https://github.com/fzred/calcjs#readme",
   "devDependencies": {
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
