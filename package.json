@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fzred/calcjs.git"
+    "url": "git+https://github.com/fzred/calculatorjs.git"
   },
   "author": "lred <1179750402@qq.com> (http://www.lred.me) ",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/fzred/calcjs/issues"
+    "url": "https://github.com/fzred/calculatorjs/issues"
   },
-  "homepage": "https://github.com/fzred/calcjs#readme",
+  "homepage": "https://github.com/fzred/calculatorjs#readme",
   "devDependencies": {
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
