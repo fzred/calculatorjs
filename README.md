@@ -1,5 +1,7 @@
 # Calculatorjs
 
+[![NPM version](https://img.shields.io/npm/v/calculatorjs.svg?style=flat)](https://www.npmjs.com/package/calculatorjs)
+
 ```javascript
 > 2.1+2.2
 4.300000000000001

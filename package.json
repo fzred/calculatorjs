@@ -1,7 +1,7 @@
 {
   "name": "calculatorjs",
   "version": "0.1.0",
-  "description": "calc(' 0.1  * 0.2 + 0.4')",
+  "description": "Accurately arithmetic library",
   "main": "dist/calc.min.js",
   "scripts": {
     "build": "cross-env BABEL_ENV=product webpack",
@@ -11,8 +11,12 @@
     "type": "git",
     "url": "git+https://github.com/fzred/calculatorjs.git"
   },
+  "keywords": [
+    "calc",
+    "calculatorjs"
+  ],
   "author": "lred <1179750402@qq.com> (http://www.lred.me) ",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/fzred/calculatorjs/issues"
   },
