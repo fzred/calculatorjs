@@ -1,51 +1,74 @@
-const _cf = (function () {
-    function _shift(x) {
-        const parts = x.toString().split('.')
-        return (parts.length < 2) ? 1 : Math.pow(10, parts[1].length)
-    }
+function split(number) {
+    number = number + ''
 
-    return function (l, r) {
-        return Math.max(_shift(l), _shift(r))
+    const index = number.indexOf('.')
+    if (index > -1) {
+        return [number.substr(0, index), number.substr(index + 1)]
+    } else {
+        return [number]
     }
-})()
+}
+
+function getDecimalLength(arr) {
+    return (arr.length < 2) ? 0 : arr[1].length
+}
+
+function getMaxDecimalLength(l, r) {
+    return Math.max(getDecimalLength(l), getDecimalLength(r))
+}
+
 
 /**
  * 只处理小数点
  * @param {*} number 
  * @param {*} f 
  */
-function _mul(number, f) {
-    f = '' + f
-    const index = f.indexOf('0')
-    if (index > -1) {
-        f = f.length - f.indexOf('0')
-    } else {
-        f = 0
+function _mul(arr, f) {
+    if (!arr[1]) {
+        return arr[0] * Math.pow(10, f)
     }
-    const arr = String(number).split('.')
-    const decimal = (arr[1] || '') + Array(f + 1).join('0')
-    const newNumber = arr[0] + decimal.slice(0, f)
-    return parseInt(newNumber)
+    const decimal = arr[1] + '0000000000'
+    const newNumber = arr[0] + decimal.substr(0, f)
+    return Number(newNumber)
 }
 
 function add(l, r) {
-    const f = _cf(l, r)
-    return parseInt(_mul(l, f) + _mul(r, f)) / f
+    const arrL = split(l)
+    const arrR = split(r)
+
+    const f = getMaxDecimalLength(arrL, arrR)
+    if (f === 0) return l + r
+
+    return (_mul(arrL, f) + _mul(arrR, f)) / Math.pow(10, f)
 }
 
 function sub(l, r) {
-    const f = _cf(l, r)
-    return (_mul(l, f) - _mul(r, f)) / f
+    const arrL = split(l)
+    const arrR = split(r)
+
+    const f = getMaxDecimalLength(arrL, arrR)
+    if (f === 0) return l - r
+
+    return (_mul(arrL, f) - _mul(arrR, f)) / Math.pow(10, f)
 }
 
 function mul(l, r) {
-    const f = _cf(l, r)
-    return _mul(l, f) * _mul(r, f) / (f * f)
+    const arrL = split(l)
+    const arrR = split(r)
+    const f = getMaxDecimalLength(arrL, arrR)
+    if (f === 0) return l * r
+    const commonMultiple = Math.pow(10, f)
+    return _mul(arrL, f) * _mul(arrR, f) / (commonMultiple * commonMultiple)
 }
 
 function div(l, r) {
-    const f = _cf(l, r)
-    return _mul(l, f) / _mul(r, f)
+    const arrL = split(l)
+    const arrR = split(r)
+
+    const f = getMaxDecimalLength(arrL, arrR)
+    if (f === 0) return l / r
+
+    return _mul(arrL, f) / _mul(arrR, f)
 }
 
 module.exports = {
