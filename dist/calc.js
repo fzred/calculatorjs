@@ -309,7 +309,12 @@ var _cf = function () {
  */
 function _mul(number, f) {
     f = '' + f;
-    f = f.length - f.indexOf('0');
+    var index = f.indexOf('0');
+    if (index > -1) {
+        f = f.length - f.indexOf('0');
+    } else {
+        f = 0;
+    }
     var arr = String(number).split('.');
     var decimal = (arr[1] || '') + Array(f + 1).join('0');
     var newNumber = arr[0] + decimal.slice(0, f);

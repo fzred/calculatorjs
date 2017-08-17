@@ -16,7 +16,12 @@ const _cf = (function () {
  */
 function _mul(number, f) {
     f = '' + f
-    f = f.length - f.indexOf('0')
+    const index = f.indexOf('0')
+    if (index > -1) {
+        f = f.length - f.indexOf('0')
+    } else {
+        f = 0
+    }
     const arr = String(number).split('.')
     const decimal = (arr[1] || '') + Array(f + 1).join('0')
     const newNumber = arr[0] + decimal.slice(0, f)

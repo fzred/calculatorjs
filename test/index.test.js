@@ -4,6 +4,10 @@ test('add 2.1 + 2.2 to equal 4.3', () => {
     expect(calc('2.1+2.2')).toBe(4.3)
 })
 
+test('add 1+1 to equal 2', () => {
+    expect(calc('1+1')).toBe(2)
+})
+
 test('sub 1.1-0.11 to equal 0.99', () => {
     expect(calc('1.1-0.11')).toBe(0.99)
 })
