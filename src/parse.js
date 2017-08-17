@@ -13,15 +13,6 @@ const INITIAL_STATUS = 1  // 初始化
 const IN_INT_PART_STATUS = 2 // 整数
 const IN_FRAC_PART_STATUS = 4 // 小数
 
-const tokensEnum = {
-    '+': ADD_OPERATOR_TOKEN,
-    '-': SUB_OPERATOR_TOKEN,
-    '*': MUL_OPERATOR_TOKEN,
-    '/': DIV_OPERATOR_TOKEN,
-    '(': LEFT_PAREN_TOKEN,
-    ')': RIGHT_PAREN_TOKEN,
-}
-
 function getToken(str) {
     let linePos = 0
     let curStr
@@ -32,10 +23,36 @@ function getToken(str) {
 
     while (str[linePos]) {
         curStr = str[linePos]
-        const token = tokensEnum[curStr]
-        if (token) {
+
+        if (curStr == '+') {
             tokens.push({
-                type: token,
+                type: ADD_OPERATOR_TOKEN,
+            })
+            status = INITIAL_STATUS
+        } else if (curStr == '-') {
+            status = INITIAL_STATUS
+            tokens.push({
+                type: SUB_OPERATOR_TOKEN,
+            })
+            status = INITIAL_STATUS
+        } else if (curStr == '*') {
+            tokens.push({
+                type: MUL_OPERATOR_TOKEN,
+            })
+            status = INITIAL_STATUS
+        } else if (curStr == '/') {
+            tokens.push({
+                type: DIV_OPERATOR_TOKEN,
+            })
+            status = INITIAL_STATUS
+        } else if (curStr == '(') {
+            tokens.push({
+                type: LEFT_PAREN_TOKEN,
+            })
+            status = INITIAL_STATUS
+        } else if (curStr == ')') {
+            tokens.push({
+                type: RIGHT_PAREN_TOKEN,
             })
             status = INITIAL_STATUS
         } else if (/[0-9]/.test(curStr)) {
