@@ -5,13 +5,8 @@
 ```javascript
 > 2.1+2.2
 4.300000000000001
-> calc('2.1+2.2')
+> calc(' 2.1+2.2 ')
 4.3
-
-> 0.1*(0.2/(2.1+2.2-1.1))
-0.0062499999999999995
-> calc('0.1*(0.2/(2.1+2.2-1.1))')
-0.00625
 ```
 
 ## Installation
@@ -19,7 +14,7 @@ In browser
 ```html
 <script src="calc.js"></script>
 <script>
-    console.log(calc('0.1*(0.1+0.1)'))
+    console.log(calc(' 0.1*(0.1+0.1) '))
 </script>
 ```
 Using npm:
@@ -30,7 +25,22 @@ In Node.js:
 ```javascript
 const calc = require('calculatorjs')
 
-console.log(calc('0.1*(0.1+0.1)'))
+console.log(calc(' 0.1*(0.1+0.1) '))
+```
+
+## DOC
+```
+calc(' 1+1-1*1/2+(1/1)/-1 ')
+```
+Support **+** **-** **\*** **/** **(** **)** **minus**
+
+### Fast API
+**If you need fast calculations,you can use it,10 times faster than calc.**
+```javascript
+calc.add(0.1, 0.2) // 0.3
+calc.sub(0.1, 0.2) // -0.1
+calc.mul(0.1, 0.2) // 0.02
+calc.div(0.1, 0.2) // 0.5
 ```
 ## License
 
