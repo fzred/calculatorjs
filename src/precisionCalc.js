@@ -9,24 +9,38 @@ const _cf = (function () {
     }
 })()
 
+/**
+ * 只处理小数点
+ * @param {*} number 
+ * @param {*} f 
+ */
+function _mul(number, f) {
+    f = '' + f
+    f = f.length - f.indexOf('0')
+    const arr = String(number).split('.')
+    const decimal = (arr[1] || '') + Array(f + 1).join('0')
+    const newNumber = arr[0] + decimal.slice(0, f)
+    return parseInt(newNumber)
+}
+
 function add(l, r) {
     const f = _cf(l, r)
-    return parseInt(l * f + r * f) / f
+    return parseInt(_mul(l, f) + _mul(r, f)) / f
 }
 
 function sub(l, r) {
     const f = _cf(l, r)
-    return parseInt(l * f - r * f) / f
+    return (_mul(l, f) - _mul(r, f)) / f
 }
 
 function mul(l, r) {
     const f = _cf(l, r)
-    return parseInt(l * f) * parseInt(r * f) / (f * f)
+    return _mul(l, f) * _mul(r, f) / (f * f)
 }
 
 function div(l, r) {
     const f = _cf(l, r)
-    return parseInt(l * f) / parseInt(r * f)
+    return _mul(l, f) / _mul(r, f)
 }
 
 module.exports = {
