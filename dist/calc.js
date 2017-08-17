@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -83,7 +83,90 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var precisionCalc = __webpack_require__(2);
+function split(number) {
+    number = number + '';
+
+    var index = number.indexOf('.');
+    if (index > -1) {
+        return [number.substr(0, index), number.substr(index + 1)];
+    } else {
+        return [number];
+    }
+}
+
+function getDecimalLength(arr) {
+    return arr.length < 2 ? 0 : arr[1].length;
+}
+
+function getMaxDecimalLength(l, r) {
+    return Math.max(getDecimalLength(l), getDecimalLength(r));
+}
+
+/**
+ * 只处理小数点
+ * @param {*} number 
+ * @param {*} f 
+ */
+function _mul(arr, f) {
+    if (!arr[1]) {
+        return arr[0] * Math.pow(10, f);
+    }
+    var decimal = arr[1] + '0000000000';
+    var newNumber = arr[0] + decimal.substr(0, f);
+    return Number(newNumber);
+}
+
+function add(l, r) {
+    var arrL = split(l);
+    var arrR = split(r);
+
+    var f = getMaxDecimalLength(arrL, arrR);
+    if (f === 0) return l + r;
+
+    return (_mul(arrL, f) + _mul(arrR, f)) / Math.pow(10, f);
+}
+
+function sub(l, r) {
+    var arrL = split(l);
+    var arrR = split(r);
+
+    var f = getMaxDecimalLength(arrL, arrR);
+    if (f === 0) return l - r;
+
+    return (_mul(arrL, f) - _mul(arrR, f)) / Math.pow(10, f);
+}
+
+function mul(l, r) {
+    var arrL = split(l);
+    var arrR = split(r);
+    var f = getMaxDecimalLength(arrL, arrR);
+    if (f === 0) return l * r;
+    var commonMultiple = Math.pow(10, f);
+    return _mul(arrL, f) * _mul(arrR, f) / (commonMultiple * commonMultiple);
+}
+
+function div(l, r) {
+    var arrL = split(l);
+    var arrR = split(r);
+
+    var f = getMaxDecimalLength(arrL, arrR);
+    if (f === 0) return l / r;
+
+    return _mul(arrL, f) / _mul(arrR, f);
+}
+
+module.exports = {
+    add: add, sub: sub, mul: mul, div: div
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var precisionCalc = __webpack_require__(0);
 
 var NUMBER_TOKEN = 1;
 var ADD_OPERATOR_TOKEN = 2;
@@ -269,81 +352,26 @@ module.exports = {
 };
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _require = __webpack_require__(0),
-    parseExpression = _require.parseExpression;
-
-function calc(str) {
-    return parseExpression(str);
-}
-
-module.exports = calc;
-
-/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _cf = function () {
-    function _shift(x) {
-        var parts = x.toString().split('.');
-        return parts.length < 2 ? 1 : Math.pow(10, parts[1].length);
-    }
+var _require = __webpack_require__(1),
+    parseExpression = _require.parseExpression;
 
-    return function (l, r) {
-        return Math.max(_shift(l), _shift(r));
-    };
-}();
+var precisionCalc = __webpack_require__(0);
 
-/**
- * 只处理小数点
- * @param {*} number 
- * @param {*} f 
- */
-function _mul(number, f) {
-    f = '' + f;
-    var index = f.indexOf('0');
-    if (index > -1) {
-        f = f.length - f.indexOf('0');
-    } else {
-        f = 0;
-    }
-    var arr = String(number).split('.');
-    var decimal = (arr[1] || '') + Array(f + 1).join('0');
-    var newNumber = arr[0] + decimal.slice(0, f);
-    return parseInt(newNumber);
+function calc(str) {
+    return parseExpression(str);
 }
 
-function add(l, r) {
-    var f = _cf(l, r);
-    return parseInt(_mul(l, f) + _mul(r, f)) / f;
+for (var key in precisionCalc) {
+    calc[key] = precisionCalc[key];
 }
 
-function sub(l, r) {
-    var f = _cf(l, r);
-    return (_mul(l, f) - _mul(r, f)) / f;
-}
-
-function mul(l, r) {
-    var f = _cf(l, r);
-    return _mul(l, f) * _mul(r, f) / (f * f);
-}
-
-function div(l, r) {
-    var f = _cf(l, r);
-    return _mul(l, f) / _mul(r, f);
-}
-
-module.exports = {
-    add: add, sub: sub, mul: mul, div: div
-};
+module.exports = calc;
 
 /***/ })
 /******/ ]);
