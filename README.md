@@ -17,7 +17,7 @@
 ## Installation
 In browser
 ```html
-<script src="../dist/calc.min.js"></script>
+<script src="calc.js"></script>
 <script>
     console.log(calc('0.1*(0.1+0.1)'))
 </script>

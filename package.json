@@ -1,10 +1,11 @@
 {
   "name": "calculatorjs",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Accurately arithmetic library",
   "main": "dist/calc.min.js",
   "scripts": {
-    "build": "cross-env BABEL_ENV=product webpack",
+    "build": "npm run build-dev && cross-env BABEL_ENV=product webpack",
+    "build-dev": "webpack",
     "test": "jest"
   },
   "repository": {

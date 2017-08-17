@@ -4,7 +4,7 @@ const join = require('path').join
 const product = process.env.BABEL_ENV === 'product'
 
 let filename = 'calc.js';
-let path = join(__dirname, 'lib');
+let path = join(__dirname, 'dist');
 const plugins = []
 const uglify = new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false, drop_console: true } })
 
