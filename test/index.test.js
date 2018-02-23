@@ -8,6 +8,10 @@ test('add 1+1 to equal 2', () => {
     expect(calc('1+1')).toBe(2)
 })
 
+test('add 0.99999999999999 + 0.00000000000001 to equal 1', () => {
+    expect(calc('0.99999999999999 + 0.00000000000001')).toBe(1)
+})
+
 test('sub 1.1-0.11 to equal 0.99', () => {
     expect(calc('1.1-0.11')).toBe(0.99)
 })
@@ -23,7 +27,6 @@ test('sub 0.1 * 0.2 to equal 0.02', () => {
 test('div 10.1 / 0.1 to equal 101', () => {
     expect(calc('10.1/0.1')).toBe(101)
 })
-
 
 test('mixture 0.1 * (0.2/(2.1 + 2.2 - 1.1)) to equal 0.00625', () => {
     expect(calc('0.1 * (0.2/(2.1 + 2.2 - 1.1))')).toBe(0.00625)

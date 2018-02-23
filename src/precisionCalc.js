@@ -27,7 +27,7 @@ function _mul(arr, f) {
     if (!arr[1]) {
         return arr[0] * Math.pow(10, f)
     }
-    const decimal = arr[1] + '0000000000'
+    const decimal = arr[1] + new Array(f).join('0')
     const newNumber = arr[0] + decimal.substr(0, f)
     return Number(newNumber)
 }
