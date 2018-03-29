@@ -1,4 +1,17 @@
 const calc = require('../src/index')
+const { round } = calc
+
+test('round(1.999, 1) to equal 2', () => {
+    expect(round(1.999, 1)).toBe(2)
+})
+
+test('round(1.199, 1) to equal 1.2', () => {
+    expect(round(1.199, 1)).toBe(1.2)
+})
+
+test('round(1.111, 2) to equal to equal 1.11', () => {
+    expect(round(1.111, 2)).toBe(1.11)
+})
 
 test('add 2.1 + 2.2 to equal 4.3', () => {
     expect(calc('2.1+2.2')).toBe(4.3)
