@@ -2,8 +2,6 @@
 
 [![NPM version](https://img.shields.io/npm/v/calculatorjs.svg?style=flat)](https://www.npmjs.com/package/calculatorjs)
 
-[中文文档](/README-ZH.md)
-
 ```javascript
 > 2.1 + 2.2
 4.300000000000001
@@ -11,18 +9,18 @@
 4.3
 ```
 
-## Usage
-Using NPM:
+## 安装
+NPM
 ```bash
 npm install --save calculatorjs
 ```
-In Node.js or Browser:
+支持 Node.js 和浏览器
 ```javascript
 const calc = require('calculatorjs')
 
 console.log(calc(' 0.1*(0.1+0.1) '))
 ```
-Direct `<script>` Include
+直接 `<script>` 引入
 ```html
 <script src="calc.js"></script>
 <script>
@@ -30,12 +28,12 @@ Direct `<script>` Include
 </script>
 ```
 
-## DOC
-### Arithmetic expression
+## 文档
+### 算术表达式
 ```javascript
 calc(' 1 + (2 * 3 - 1) / 4 * -1 ')
 ```
-Support **+** **-** **\*** **/** **(** **)** **minus**
+支持 **+** **-** **\*** **/** **(** **)** **负数**
 
 ### API
 ```javascript
