@@ -75,7 +75,7 @@ function fixedFloat(l, r, sign) {
     let fLen = Math.max(arrL[1], arrR[1])
 
     if (fLen === 0) {
-        return operate(l, r, sign, 1)
+        return operate(Number(l), Number(r), sign, 1)
     }
     const f = Math.pow(10, fLen)
     if (arrL[1] !== arrR[1]) {
@@ -85,7 +85,7 @@ function fixedFloat(l, r, sign) {
             arrL[0] += padding0(arrR[1] - arrL[1])
         }
     }
-    return operate(+arrL[0], +arrR[0], sign, f)
+    return operate(Number(arrL[0]), Number(arrR[0]), sign, f)
 }
 
 /**
