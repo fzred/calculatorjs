@@ -19,6 +19,9 @@ interface Token {
     value?: string
 }
 
+/** 括号最大嵌套深度，超过则抛 ParseError（而非泄漏原生栈溢出 RangeError）。 */
+const MAX_PAREN_DEPTH = 1000
+
 const SINGLE: Record<string, T> = {
     '+': T.Plus,
     '-': T.Minus,
@@ -97,6 +100,7 @@ export function parseExpression(input: string): number {
 
     const tokens = tokenize(input)
     let pos = 0
+    let depth = 0
     const peek = (): Token => tokens[pos]
     const next = (): Token => tokens[pos++]
 
@@ -112,7 +116,12 @@ export function parseExpression(input: string): number {
         if (token.type === T.Num) {
             value = parseNumber(token.value as string)
         } else if (token.type === T.LParen) {
+            // 限制括号嵌套深度，避免深层递归撑爆调用栈而泄漏原生 RangeError
+            if (++depth > MAX_PAREN_DEPTH) {
+                throw new ParseError('表达式嵌套层级过深', token.pos)
+            }
             value = parseAddSub()
+            depth--
             const close = next()
             if (close.type !== T.RParen) {
                 throw new ParseError('缺少右括号 )', close.pos)

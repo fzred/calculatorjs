@@ -77,7 +77,10 @@ function split(n: number): Split {
     return { digits: body.slice(0, dot) + body.slice(dot + 1), scale: body.length - dot - 1, sign }
 }
 
-/** 加减：对齐到相同小数位后用整数运算，再缩放回去。 */
+/**
+ * 加减：对齐到相同小数位后用整数运算，再缩放回去。
+ * 整数化超出 Number 安全范围（2^53）时退化为原生运算——保证「不劣于原生」。
+ */
 function addSub(l: number, r: number, op: '+' | '-'): number {
     const a = split(l)
     const b = split(r)
@@ -85,25 +88,52 @@ function addSub(l: number, r: number, op: '+' | '-'): number {
     const intA = a.sign * Number(a.digits + '0'.repeat(scale - a.scale))
     const intB = b.sign * Number(b.digits + '0'.repeat(scale - b.scale))
     const result = op === '+' ? intA + intB : intA - intB
+    if (
+        !Number.isSafeInteger(intA) ||
+        !Number.isSafeInteger(intB) ||
+        !Number.isSafeInteger(result)
+    ) {
+        return op === '+' ? l + r : l - r
+    }
     return result / 10 ** scale
 }
 
-/** 乘法：各自取整后相乘，再除以 10^(两边小数位之和)。不对齐补零。 */
+/**
+ * 乘法：各自取整后相乘，再除以 10^(两边小数位之和)，不对齐补零。
+ * 整数串乘积超出安全范围时退化为原生乘法——保证「不劣于原生」。
+ */
 function multiply(l: number, r: number): number {
     const a = split(l)
     const b = split(r)
-    const sign = a.sign * b.sign
-    return (sign * Number(a.digits) * Number(b.digits)) / 10 ** (a.scale + b.scale)
+    const intA = Number(a.digits)
+    const intB = Number(b.digits)
+    const product = intA * intB
+    if (
+        !Number.isSafeInteger(intA) ||
+        !Number.isSafeInteger(intB) ||
+        !Number.isSafeInteger(product)
+    ) {
+        return l * r
+    }
+    return (a.sign * b.sign * product) / 10 ** (a.scale + b.scale)
 }
 
-/** 除法：用整数比 + 10 的幂次调整量级，比裸 l/r 更稳。除数为 0 抛错。 */
+/**
+ * 除法：把两边对齐到相同小数位后做一次整数除法（10^scale 相消），
+ * 避免「乘以分数次幂」引入额外浮点误差。除数为 0 抛错；
+ * 对齐后整数超出安全范围时退化为原生除法。
+ */
 function divide(l: number, r: number): number {
+    const a = split(l)
     const b = split(r)
     if (Number(b.digits) === 0) throw new CalcError('除数不能为 0')
-    const a = split(l)
-    const intA = a.sign * Number(a.digits)
-    const intB = b.sign * Number(b.digits)
-    return (intA / intB) * 10 ** (b.scale - a.scale)
+    const scale = Math.max(a.scale, b.scale)
+    const intA = a.sign * Number(a.digits + '0'.repeat(scale - a.scale))
+    const intB = b.sign * Number(b.digits + '0'.repeat(scale - b.scale))
+    if (!Number.isSafeInteger(intA) || !Number.isSafeInteger(intB)) {
+        return l / r
+    }
+    return intA / intB
 }
 
 /** 对两个归一化后的输入执行一次二元运算。 */
@@ -134,7 +164,15 @@ function alignToInt(l: number, r: number): [number, number] {
 
 /** 比较两个数，返回 -1 / 0 / 1（在对齐后的整数上比较，避免浮点误差）。 */
 export function compareNumbers(l: Numeric, r: Numeric): -1 | 0 | 1 {
-    const [a, b] = alignToInt(parseNumber(l), parseNumber(r))
+    const x = parseNumber(l)
+    const y = parseNumber(r)
+    const [a, b] = alignToInt(x, y)
+    // 对齐后超出安全范围时退化为原生比较
+    if (!Number.isSafeInteger(a) || !Number.isSafeInteger(b)) {
+        if (x < y) return -1
+        if (x > y) return 1
+        return 0
+    }
     if (a < b) return -1
     if (a > b) return 1
     return 0
