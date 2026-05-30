@@ -1,36 +1,69 @@
 {
-  "name": "calculatorjs",
-  "version": "1.1.1",
-  "description": "Accurately arithmetic library",
-  "main": "dist/calc.min.js",
-  "scripts": {
-    "build": "npm run build-dev && cross-env BABEL_ENV=product webpack",
-    "build-dev": "webpack",
-    "test": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fzred/calculatorjs.git"
-  },
-  "keywords": [
-    "calc",
-    "calculatorjs"
-  ],
-  "author": "lred <1179750402@qq.com> (http://www.lred.me) ",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/fzred/calculatorjs/issues"
-  },
-  "homepage": "https://github.com/fzred/calculatorjs#readme",
-  "devDependencies": {
-    "babel-core": "^6.22.1",
-    "babel-loader": "^6.2.10",
-    "babel-plugin-lodash": "^3.2.11",
-    "babel-plugin-transform-runtime": "^6.22.0",
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-stage-2": "^6.22.0",
-    "cross-env": "^3.1.4",
-    "jest": "^19.0.2",
-    "webpack": "^2.3.3"
-  }
+    "name": "calculatorjs",
+    "version": "1.2.0",
+    "description": "Accurate arithmetic library — fixes JavaScript floating point precision, with a built-in expression parser. Zero dependencies.",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "unpkg": "./dist/calc.umd.min.js",
+    "jsdelivr": "./dist/calc.umd.min.js",
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "require": {
+                "types": "./dist/index.d.cts",
+                "default": "./dist/index.cjs"
+            }
+        },
+        "./package.json": "./package.json"
+    },
+    "files": ["dist", "README-ZH.md"],
+    "sideEffects": false,
+    "scripts": {
+        "build": "tsup && node scripts/patch-cjs.mjs",
+        "dev": "tsup --watch",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "coverage": "vitest run --coverage",
+        "lint": "biome check .",
+        "lint:fix": "biome check --write .",
+        "format": "biome format --write .",
+        "typecheck": "tsc --noEmit",
+        "prepublishOnly": "npm run lint && npm run typecheck && npm run test && npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/fzred/calculatorjs.git"
+    },
+    "keywords": [
+        "calc",
+        "calculator",
+        "calculatorjs",
+        "precision",
+        "arithmetic",
+        "decimal",
+        "float",
+        "floating-point",
+        "expression"
+    ],
+    "author": "lred <1179750402@qq.com> (http://www.lred.me)",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/fzred/calculatorjs/issues"
+    },
+    "homepage": "https://github.com/fzred/calculatorjs#readme",
+    "engines": {
+        "node": ">=18"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^1.9.4",
+        "@vitest/coverage-v8": "^2.1.8",
+        "tsup": "^8.3.5",
+        "typescript": "^5.6.3",
+        "vitest": "^2.1.8"
+    }
 }

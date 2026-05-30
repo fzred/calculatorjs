@@ -4,10 +4,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>test</title>
-        <script src="../dist/calc.js"></script>
+        <title>calculatorjs UMD test</title>
+        <script src="../dist/calc.umd.min.js"></script>
         <script>
-            console.log(calc('0.1*(0.1+0.1)'))
+            console.log('calc("0.1*(0.1+0.1)") =', calc('0.1*(0.1+0.1)'))
+            console.log('calc.add(0.1, 0.2) =', calc.add(0.1, 0.2))
+            console.log('calc.round(0.555, 2) =', calc.round(0.555, 2))
         </script>
     </head>
     <body>
