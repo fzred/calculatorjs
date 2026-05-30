@@ -28,12 +28,13 @@
         "dev": "tsup --watch",
         "test": "vitest run",
         "test:watch": "vitest",
+        "test:dist": "npm run build && node scripts/smoke-dist.mjs",
         "coverage": "vitest run --coverage",
         "lint": "biome check .",
         "lint:fix": "biome check --write .",
         "format": "biome format --write .",
         "typecheck": "tsc --noEmit",
-        "prepublishOnly": "npm run lint && npm run typecheck && npm run test && npm run build"
+        "prepublishOnly": "npm run lint && npm run typecheck && npm run test && npm run build && node scripts/smoke-dist.mjs"
     },
     "repository": {
         "type": "git",

@@ -22,3 +22,4 @@ jobs:
       - run: npm run typecheck
       - run: npm run coverage
       - run: npm run build
+      - run: node scripts/smoke-dist.mjs # 校验编译后产物（CJS/ESM/UMD 三态）
