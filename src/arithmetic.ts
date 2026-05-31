@@ -62,7 +62,7 @@ export function abs(n: Numeric): number {
 export function mod(a: Numeric, b: Numeric): number {
     const x = parseNumber(a)
     const y = parseNumber(b)
-    if (y === 0) throw new CalcError('取余的除数不能为 0')
+    if (y === 0) throw new CalcError(`取余的除数不能为 0: ${x} % ${y}`)
     const quotient = Math.trunc(binaryOp(x, y, '/'))
     return binaryOp(x, binaryOp(y, quotient, '*'), '-')
 }

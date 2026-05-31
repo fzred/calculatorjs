@@ -99,18 +99,34 @@ calc.sum(0.1, 0.2, 0.3)  // 0.6
 
 ### 错误处理
 
-非法输入不再静默返回 `NaN` / `Infinity`，而是抛出异常。
+非法输入不再静默返回 `NaN` / `Infinity`，而是抛出异常（真正的 `Error` 子类，带 `.stack`
+堆栈）。错误对象携带定位信息：
+
+- `CalcError`：运算错误；除零 / 取余除零的信息中会带上操作数。
+- `ParseError`（继承 `CalcError`）：语法错误，带 `.position`、`.expression`，并在 message
+  中渲染可视化指针。
 
 ```javascript
 import calc, { CalcError, ParseError } from 'calculatorjs'
 
+calc.div(7, 0)
+// CalcError: 除数不能为 0: 7 / 0
+
+calc('1 + (2 * )')
+// ParseError: 期望数字或左括号 (位置 9)
+//   1 + (2 * )
+//            ^
+
 try {
-    calc.div(1, 0)       // 抛出 CalcError：除数不能为 0
-    calc.add('abc', 1)   // 抛出 CalcError
-    calc('1 + )')        // 抛出 ParseError（带 .position 位置信息）
+    calc('10 + 3x')
 } catch (e) {
-    if (e instanceof ParseError) console.log('语法错误，位置', e.position)
-    else if (e instanceof CalcError) console.log('运算错误', e.message)
+    if (e instanceof ParseError) {
+        console.log(e.position)   // 6
+        console.log(e.expression) // '10 + 3x'
+        console.log(e.message)    // 信息 + 指针
+    } else if (e instanceof CalcError) {
+        console.log(e.message)
+    }
 }
 ```
 

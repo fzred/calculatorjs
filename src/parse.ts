@@ -69,7 +69,7 @@ function tokenize(input: string): Token[] {
                     digitSeen = true
                     i++
                 } else if (c === '.') {
-                    if (dotSeen) throw new ParseError('数字中包含多个小数点', i)
+                    if (dotSeen) throw new ParseError('数字中包含多个小数点', i, input)
                     dotSeen = true
                     i++
                 } else {
@@ -77,12 +77,12 @@ function tokenize(input: string): Token[] {
                 }
             }
             const raw = input.slice(start, i)
-            if (!digitSeen) throw new ParseError(`无效的数字: "${raw}"`, start)
+            if (!digitSeen) throw new ParseError(`无效的数字: "${raw}"`, start, input)
             tokens.push({ type: T.Num, pos: start, value: raw })
             continue
         }
 
-        throw new ParseError(`无法识别的字符: "${ch}"`, i)
+        throw new ParseError(`无法识别的字符: "${ch}"`, i, input)
     }
 
     tokens.push({ type: T.End, pos: n })
@@ -118,16 +118,16 @@ export function parseExpression(input: string): number {
         } else if (token.type === T.LParen) {
             // 限制括号嵌套深度，避免深层递归撑爆调用栈而泄漏原生 RangeError
             if (++depth > MAX_PAREN_DEPTH) {
-                throw new ParseError('表达式嵌套层级过深', token.pos)
+                throw new ParseError('表达式嵌套层级过深', token.pos, input)
             }
             value = parseAddSub()
             depth--
             const close = next()
             if (close.type !== T.RParen) {
-                throw new ParseError('缺少右括号 )', close.pos)
+                throw new ParseError('缺少右括号 )', close.pos, input)
             }
         } else {
-            throw new ParseError('期望数字或左括号', token.pos)
+            throw new ParseError('期望数字或左括号', token.pos, input)
         }
 
         if (negate) return value === 0 ? 0 : -value
@@ -157,7 +157,7 @@ export function parseExpression(input: string): number {
     const result = parseAddSub()
     const last = peek()
     if (last.type !== T.End) {
-        throw new ParseError('表达式存在多余的内容', last.pos)
+        throw new ParseError('表达式存在多余的内容', last.pos, input)
     }
     return result
 }

@@ -126,7 +126,7 @@ function multiply(l: number, r: number): number {
 function divide(l: number, r: number): number {
     const a = split(l)
     const b = split(r)
-    if (Number(b.digits) === 0) throw new CalcError('除数不能为 0')
+    if (Number(b.digits) === 0) throw new CalcError(`除数不能为 0: ${l} / ${r}`)
     const scale = Math.max(a.scale, b.scale)
     const intA = a.sign * Number(a.digits + '0'.repeat(scale - a.scale))
     const intB = b.sign * Number(b.digits + '0'.repeat(scale - b.scale))

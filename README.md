@@ -100,18 +100,34 @@ The same functions are available as named exports: `import { add, cmp, round } f
 
 ### Error handling
 
-Invalid input now throws instead of returning `NaN` / `Infinity` silently.
+Invalid input now throws (a real `Error` subclass with a `.stack`) instead of returning
+`NaN` / `Infinity` silently. Errors carry context to help you locate the problem:
+
+- `CalcError` for arithmetic errors; division/mod by zero includes the operands.
+- `ParseError` (extends `CalcError`) for syntax errors, with `.position`, `.expression`, and a
+  visual pointer rendered into the message.
 
 ```javascript
 import calc, { CalcError, ParseError } from 'calculatorjs'
 
+calc.div(7, 0)
+// CalcError: 除数不能为 0: 7 / 0
+
+calc('1 + (2 * )')
+// ParseError: 期望数字或左括号 (位置 9)
+//   1 + (2 * )
+//            ^
+
 try {
-    calc.div(1, 0)       // throws CalcError: 除数不能为 0
-    calc.add('abc', 1)   // throws CalcError
-    calc('1 + )')        // throws ParseError (with .position)
+    calc('10 + 3x')
 } catch (e) {
-    if (e instanceof ParseError) console.log('syntax error at', e.position)
-    else if (e instanceof CalcError) console.log('calc error', e.message)
+    if (e instanceof ParseError) {
+        console.log(e.position)   // 6
+        console.log(e.expression) // '10 + 3x'
+        console.log(e.message)    // message + caret pointer
+    } else if (e instanceof CalcError) {
+        console.log(e.message)
+    }
 }
 ```
 
